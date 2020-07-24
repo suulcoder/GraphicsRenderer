@@ -11,6 +11,7 @@ Render Class: This class is an BMP image renderer
 """
 
 from encoder import *
+from obj import Obj
 
 class Render(object):
 	def __init__(self):								 #glInit(): instantiate any needed object										
@@ -105,9 +106,11 @@ class Render(object):
 				y += 1 if y1 < y2 else -1
 				threshold += 2*dx
 			if steep:
+				print(x,y)
 				self.framebuffer[x][y] = self.colorVertex
 				toReturn.append([y,x])
 			else:
+				print(x,y)
 				self.framebuffer[y][x] = self.colorVertex
 				toReturn.append([x,y])
 			offset += 2*dy
@@ -137,8 +140,23 @@ class Render(object):
 		for pixel in self.ray(points[-1][0],points[-1][1],points[0][0],points[0][1]):
 			self.ray(center_x,center_y,pixel[0],pixel[1])
 
+	def load(self, filename, translate, scale):
+	    model = Obj(filename)
+	    
+	    for face in model.faces:
+	      vcount = len(face)
 
+	      for j in range(vcount):
+	        f1 = face[j][0]
+	        f2 = face[(j + 1) % vcount][0]
 
+	        v1 = model.vertices[f1 - 1]
+	        v2 = model.vertices[f2 - 1]
+	        
+	        x1 = round((v1[0] + translate[0]) * scale[0])
+	        y1 = round((v1[1] + translate[1]) * scale[1])
+	        x2 = round((v2[0] + translate[0]) * scale[0])
+	        y2 = round((v2[1] + translate[1]) * scale[1])
 
 	def finish(self,filename):
 		f = open(filename, 'bw')   #bw bytes writing

@@ -15,7 +15,7 @@ class Obj(object):
 				prefix, value = line.split(' ', 1)
 				if prefix == 'v':
 					vertix = []
-					for item in value.split(''):
+					for item in value.split(' '):
 						if item!='':
 							vertix.append(float(item))
 					self.vertices.append(
@@ -23,7 +23,7 @@ class Obj(object):
 					)
 				elif prefix == 'f':
 					face = []
-					for item in value.split(''):
+					for item in value.split(' '):
 						if item!='':
 							point = []
 							for coordinate in item.split('/'):
@@ -33,10 +33,4 @@ class Obj(object):
 						face
 					)
 			except Exception as e:
-				print(e,line)
-		print(self.faces)
-			
-
-
-m = Obj('../R2D2/Low_Poly_R2D2.obj')
-m.read()
+				x = e  												#Ignore
