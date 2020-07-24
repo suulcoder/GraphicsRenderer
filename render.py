@@ -106,11 +106,9 @@ class Render(object):
 				y += 1 if y1 < y2 else -1
 				threshold += 2*dx
 			if steep:
-				print(x,y)
 				self.framebuffer[x][y] = self.colorVertex
 				toReturn.append([y,x])
 			else:
-				print(x,y)
 				self.framebuffer[y][x] = self.colorVertex
 				toReturn.append([x,y])
 			offset += 2*dy
@@ -157,6 +155,8 @@ class Render(object):
 	        y1 = round((v1[1] + translate[1]) * scale[1])
 	        x2 = round((v2[0] + translate[0]) * scale[0])
 	        y2 = round((v2[1] + translate[1]) * scale[1])
+
+	        self.ray(x1, y1, x2, y2)
 
 	def finish(self,filename):
 		f = open(filename, 'bw')   #bw bytes writing
