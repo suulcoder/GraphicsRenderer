@@ -106,9 +106,11 @@ class Render(object):
 				y += 1 if y1 < y2 else -1
 				threshold += 2*dx
 			if steep:
+				print(x,y)
 				self.framebuffer[x][y] = self.colorVertex
 				toReturn.append([y,x])
 			else:
+				print(x,y)
 				self.framebuffer[y][x] = self.colorVertex
 				toReturn.append([x,y])
 			offset += 2*dy
