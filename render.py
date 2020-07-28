@@ -118,25 +118,55 @@ class Render(object):
 	def paint(self,points,color):
 		self.colorVertex=color
 		#Getting a center in the figure
-		center_x = 0
-		center_y = 0
-		points_count = 0
-		for point in points:
-			center_x+=point[0]
-			center_y+=point[1]
-			points_count+=1
-		center_x= round(center_x/points_count) 
-		center_y= round(center_y/points_count)
+		if(len(points)>3):
+			#Getting a center in the figure
+			centers_x = [0,0]
+			centers_y = [0,0]
+			points_count = 0
+			for point in points:
+				if(points_count%2==1):
+					centers_x[0]+=point[0]
+					centers_y[0]+=point[1]
+				else:
+					centers_x[1]+=point[0]
+					centers_y[1]+=point[1]
+				points_count+=1
+			centers_x[0] = round(centers_x[0] /points_count)*2 
+			centers_y[0] = round(centers_y[0] /points_count)*2
+			centers_x[1] = round(centers_x[1] /points_count)*2 
+			centers_y[1] = round(centers_y[1] /points_count)*2
 
-		#Getting to draw a lot of lines to each pixel in the border
-		index = 1
-		while index!=len(points):
-			for pixel in self.ray(points[index-1][0],points[index-1][1],points[index][0],points[index][1]):
+			#Getting to draw a lot of lines to each pixel in the border
+			for center_x in centers_x:
+				for center_y in centers_y:
+					index = 1
+					while index!=len(points):
+						for pixel in self.ray(points[index-1][0],points[index-1][1],points[index][0],points[index][1]):
+							self.ray(center_x,center_y,pixel[0],pixel[1])
+						index += 1
+
+					for pixel in self.ray(points[-1][0],points[-1][1],points[0][0],points[0][1]):
+						self.ray(center_x,center_y,pixel[0],pixel[1])
+		else:
+			center_x = 0
+			center_y = 0
+			points_count = 0
+			for point in points:
+				center_x+=point[0]
+				center_y+=point[1]
+				points_count+=1
+			center_x= round(center_x/points_count) 
+			center_y= round(center_y/points_count)
+
+			#Getting to draw a lot of lines to each pixel in the border
+			index = 1
+			while index!=len(points):
+				for pixel in self.ray(points[index-1][0],points[index-1][1],points[index][0],points[index][1]):
+					self.ray(center_x,center_y,pixel[0],pixel[1])
+				index += 1
+
+			for pixel in self.ray(points[-1][0],points[-1][1],points[0][0],points[0][1]):
 				self.ray(center_x,center_y,pixel[0],pixel[1])
-			index += 1
-
-		for pixel in self.ray(points[-1][0],points[-1][1],points[0][0],points[0][1]):
-			self.ray(center_x,center_y,pixel[0],pixel[1])
 
 	def load(self, filename, translate, scale):
 	    model = Obj(filename)
