@@ -14,6 +14,7 @@ import random
 from encoder import *
 from mathModule import *
 from obj import Obj
+from shader import Shader
 
 def color(r, g, b):
   return bytes([b, g, r])
@@ -26,6 +27,7 @@ class Render(object):
     self.width = width
     self.height = height
     self.current_color = WHITE
+    self.shader = Shader()
     self.clear()
 
   def clear(self):
@@ -83,6 +85,8 @@ class Render(object):
   def set_color(self, color):
     self.current_color = color
 
+
+
   def point(self, x, y, color = None):
     try:
       self.pixels[y][x] = color or self.current_color
@@ -104,7 +108,7 @@ class Render(object):
           tx = tA.x * w + tB.x * v + tC.x * u
           ty = tA.y * w + tB.y * v + tC.y * u
           
-          color = texture.get_color(tx, ty, intensity)
+          color = self.shader.Gliese(x,y,tx,ty,intensity)
 
         z = A.z * w + B.z * v + C.z * u
 
@@ -150,9 +154,9 @@ class Render(object):
             t1 = face[0][1] - 1
             t2 = face[1][1] - 1
             t3 = face[2][1] - 1
-            tA = V3(*model.tvertices[t1])
-            tB = V3(*model.tvertices[t2])
-            tC = V3(*model.tvertices[t3])
+            tA = V3(*model.tvertices[t1],1)
+            tB = V3(*model.tvertices[t2],1)
+            tC = V3(*model.tvertices[t3],1)
 
             self.triangle(a, b, c, texture=texture, texture_coords=(tA, tB, tC), intensity=intensity)
           

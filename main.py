@@ -11,6 +11,7 @@ This file is a test of the class render.py
 from render import Render
 from Texture import Texture
 
-gl = Render(1024,1024)
-gl.load('./models/Bigmax.obj', (40, 0, 0), (12, 12, 20))
-gl.display('Bigmax.bmp')
+r = Render(800, 600)
+t = Texture('./models/model.bmp')
+r.load('./models/sphere.obj', (0.7, 0.7, 0), (400, 400, 300), texture=t)
+r.display('out.bmp')
