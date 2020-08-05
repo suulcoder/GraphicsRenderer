@@ -1,24 +1,15 @@
 """
 ---------------------------------------------------------------------
-
 Universidad del Valle de Guatemala
 Saúl Contreras	18409
 Gráficas por Computadora
-SR2: Lines
-
+Main: models
 This file is a test of the class render.py
 ---------------------------------------------------------------------
 """
 
 from render import Render
 
-gl = Render()										
-gl.CreateWindow(800,800)								
-gl.viewPort(300, 0, 300, 150)						#ViewPort should be the fourth quadrant of the image
-gl.line(-1,0,0,1)									#Should draw a line in the left top corner of the view port. 
-gl.line(-1,0,0,-1)
-gl.line(1,0,0,-1)
-gl.line(1,0,0,1)
-gl.line(0,1,0,-1)
-gl.line(1,0,-1,0)
-gl.finish('test.bmp')								
+gl = Render(2048,1024)
+gl.load('./models/Bigmax.obj', (65, -5, -5), (14, 14, 14))
+gl.display('Bigmax.bmp')
