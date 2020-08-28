@@ -68,3 +68,19 @@ def barycentric(A, B, C, P):
   w = 1 - (u + v)
 
   return w, v, u
+
+def allbarycentric(A, B, C, bbox_min, bbox_max):
+  barytransform = numpy.linalg.inv([[A.x, B.x, C.x], [A.y,B.y,C.y], [1, 1, 1]])
+  grid = numpy.mgrid[bbox_min.x:bbox_max.x, bbox_min.y:bbox_max.y].reshape(2,-1)
+  grid = numpy.vstack((grid, numpy.ones((1, grid.shape[1]))))
+  barycoords = numpy.dot(barytransform, grid)
+  # barycoords = barycoords[:,numpy.all(barycoords>=0, axis=0)]
+  barycoords = numpy.transpose(barycoords)
+  return barycoords
+
+"""
+class matrix(object):
+   def __init__(self, arg):
+     self.matrix = arg
+
+"""

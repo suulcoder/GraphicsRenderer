@@ -1,38 +1,50 @@
+import struct
+
+def color(r, g, b):
+  return bytes([b, g, r])
+
+
+# ===============================================================
+# Loads an OBJ file
+# ===============================================================
+
+
+def try_int_minus1(s, base=10, val=None):
+  try:
+    return int(s, base) - 1
+  except ValueError:
+    return val
+
+
 class Obj(object):
-    """docstring for Obj"""
     def __init__(self, filename):
         with open(filename) as f:
             self.lines = f.read().splitlines()
-
         self.vertices = []
         self.tvertices = []
-        self.vfaces = []
+        self.normals = []
+        self.faces = []
         self.read()
 
     def read(self):
         for line in self.lines:
-            try:
-                prefix, value = line.split(' ', 1)
+            if line:
+                try:
+                    prefix, value = line.split(' ', 1)
+                except:
+                    prefix = ''
                 if prefix == 'v':
-                    vertix = []
-                    for item in value.split(' '):
-                        if item!='':
-                            vertix.append(float(item))
-                    self.vertices.append(
-                        vertix
-                    )
-                if prefix == 'vt':
-                    self.tvertices.append(list(map(float, value.split(' '))))   
+                    if value[0]==' ':
+                        value = value[1:]
+                    self.vertices.append(list(map(float, value.split(' '))))
+                elif prefix == 'vt':
+                    self.tvertices.append(list(map(float, value.split(' '))))
+                elif prefix == 'vn':
+                    self.normals.append(list(map(float, value.split(' '))))
                 elif prefix == 'f':
-                    face = []
-                    for item in value.split(' '):
-                        if item!='':
-                            point = []
-                            for coordinate in item.split('/'):
-                                point.append(int(coordinate))
-                            face.append(point)
-                    self.vfaces.append(
-                        face
-                    )
-            except Exception as e:
-                x = e       
+                    self.faces.append([list(map(try_int_minus1, face.split('/'))) for face in value.split(' ')])
+        for tv in self.tvertices:
+            if(len(tv)==2):
+                tv.append(float(0.0))
+
+
